@@ -25,9 +25,36 @@ app.post("/add-employee", (req, res) => {
         res.send(`${req.body.name} added`);
     });
 });
+app.get("/color", (req, res) => {
+    fs.readFile("database", "utf8", (err, data) => {
+        const allData = JSON.parse(data);
+        res.send(JSON.stringify(allData.color));
+    });
+});
+app.post("/add-color", (req, res) => {
+    fs.readFile("database", "utf8", (err, data) => {
+        const allData = JSON.parse(data);
+        const colorData=req.body;
+        colorData.id=allData.color.length+1;
+        allData.color.push(colorData);
+        fs.writeFile("database", JSON.stringify(allData), () => { });
+        res.send(`${req.body.name} added`);
+    });
+});
 
 
 app.listen(port, () => {
     console.log(`Example app listening on port ${port}`);
 });
 
+
+
+
+
+
+// {
+//     "ProductName":"Tshirt",
+//     "Color":"green",
+//     "Size":"24xl",
+//     "Brand":"Nike"
+// }
