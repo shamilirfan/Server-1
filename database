@@ -1,1 +1,1 @@
-{"dress":[{"DressName":"Panjabi","id":1}],"color":[{"Color":"Blue","id":1}],"size":[{"Size":"14xl","id":1}],"brand":[{"Brand":"AArong","id":1}]}
+{"dress":[[{"DressName":"Panjabi","Color":"Blue","Size":"12xl","Price":"122tk","Brand":"AArong"},{"DressName":"Tshirt","Color":"Green","Size":"14xl","Price":"300tk","Brand":"Easy"},{"DressName":"Jacket","Color":"Black","Size":"22xl","Price":"400tk","Brand":"Nike"}]]}
