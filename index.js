@@ -1,10 +1,16 @@
-const express = require('express');
-const app = express();
-const port = 3000;
-const fs = require('fs');
+const express = require('express')
+const app = express()
+const port = 3001
+const fs = require("fs")
+const { parse } = require('path')
 const bodyParser = require('body-parser');
+const cors = require("cors");
 app.use(bodyParser.urlencoded({ extended: false }));
-app.use(bodyParser.json());
+app.use(bodyParser.json())
+app.use(cors({
+    origin: 'http://localhost:3000',
+    credentials: true, // <= Accept credentials (cookies) sent by the client
+}));
 
 app.get('/', (req, res) => {
     res.send('Hi Shamil Irfan!');
@@ -22,7 +28,7 @@ app.post("/add-dress", (req, res) => {
         dressData.id = allData.dress.length + 1;
         allData.dress.push(dressData);
         fs.writeFile("database", JSON.stringify(allData), () => { });
-        res.send(`${req.body.name} added`);
+        res.send(`${req.body.name}`);
     });
 });
 
