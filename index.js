@@ -5,6 +5,7 @@ const fs = require("fs")
 const { parse } = require('path')
 const bodyParser = require('body-parser');
 const cors = require("cors");
+const { json } = require('express')
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json())
 app.use(cors({
@@ -12,23 +13,28 @@ app.use(cors({
     credentials: true, // <= Accept credentials (cookies) sent by the client
 }));
 
-app.get('/', (req, res) => {
-    res.send('Hi Shamil Irfan!');
-});
-app.get("/dress", (req, res) => {
+app.post("/signin", (req, res) => {
     fs.readFile("database", "utf8", (err, data) => {
         const allData = JSON.parse(data);
-        res.send(JSON.stringify(allData.dress));
+        const userData = req.body;
+        const fusers = allData.users
+            .filter(user => user.username === userData.username && user.password === userData.password)
+        if (fusers.length > 0) {
+            res.send(JSON.stringify(fusers[0]));
+        }
+        else {
+            res.status(400).send()
+        }
     });
 });
-app.post("/add-dress", (req, res) => {
+app.post("/signup", (req, res) => {
     fs.readFile("database", "utf8", (err, data) => {
         const allData = JSON.parse(data);
-        const dressData = req.body;
-        dressData.id = allData.dress.length + 1;
-        allData.dress.push(dressData);
+        const userData = req.body;
+        userData.id = allData.users.length + 1;
+        allData.users.push(userData);
         fs.writeFile("database", JSON.stringify(allData), () => { });
-        res.send(`${req.body.name}`);
+        res.send(JSON.stringify(userData));
     });
 });
 
