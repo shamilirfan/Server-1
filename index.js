@@ -8,9 +8,10 @@ const cors = require("cors");
 const { json } = require('express')
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json())
+app.use(express.static("public"))
 app.use(cors({
     origin: 'http://localhost:3000',
-    credentials: true, // <= Accept credentials (cookies) sent by the client
+    credentials: true,
 }));
 
 app.post("/signin", (req, res) => {
@@ -35,6 +36,20 @@ app.post("/signup", (req, res) => {
         allData.users.push(userData);
         fs.writeFile("database", JSON.stringify(allData), () => { });
         res.send(JSON.stringify(userData));
+    });
+});
+app.post("/ImgUpload", (req, res) => {
+    fs.readFile("database", "utf8", (err, data) => {
+        const allData = JSON.parse(data);
+        const imageData = req.body;
+        const rawImageString = imageData.image.replace(/^data:image\/jpeg;base64,/, "")
+        const buffer = Buffer.from(rawImageString, "base64");
+        imageData.id = allData.image.length + 1;
+        fs.writeFile(`public/${imageData.id}.jpg`, buffer, () => { });
+        imageData.image = `${imageData.id}.jpg`;
+        allData.image.push(imageData);
+        fs.writeFile("database", JSON.stringify(allData), () => { });
+        res.send(JSON.stringify(imageData));
     });
 });
 
