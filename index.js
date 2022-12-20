@@ -42,6 +42,12 @@ app.post("/ImgUpload", (req, res) => {
     fs.readFile("database", "utf8", (err, data) => {
         const allData = JSON.parse(data);
         const imageData = req.body;
+        /*if (imageData.name.length < 5) {
+            res.status(400).send(JSON.stringify({
+                error: "Name must be contain atleast 5 Characters"
+            }));
+            return;
+        }*/
         const rawImageString = imageData.image.replace(/^data:image\/jpeg;base64,/, "")
         const buffer = Buffer.from(rawImageString, "base64");
         imageData.id = allData.image.length + 1;
